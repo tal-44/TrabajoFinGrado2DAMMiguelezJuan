@@ -55,4 +55,10 @@ public class BeanConfiguration {
         };
     }
 */
+
+    @Bean
+    public RegistrationService registraationService(IUserRepository iUserRepository){
+        return new RegistrationService(iUserRepository);
+    }
+
 }
