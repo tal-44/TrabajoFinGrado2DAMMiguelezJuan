@@ -9,11 +9,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tfg.backend.infrastructure.jwt.JWTAuthorizationFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final JWTAuthorizationFilter jwtAuthorizationFilter;
+
+    public SecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter) {
+        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -23,22 +31,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
-                aut -> aut.requestMatchers("/**").permitAll()
-                        //requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-
-                        //        .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/admin/products/**").permitAll()
-
-                        //        .requestMatchers("/api/v1/orders/**").hasRole("USER")
-                        .requestMatchers("/api/v1/orders/**").permitAll()
-
+                aut -> aut
+                       .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/orders/**").hasRole("USER")
                         .requestMatchers("/api/v1/payments/**").hasRole("USER") // En un fututo, se incluirán pagos
+                        .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/api/v1/home/**").permitAll()
                         .requestMatchers("/api/v1/security/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
-        );
+
+//                       .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/api/v1/admin/products/**").permitAll()
+//                        .requestMatchers("/api/v1/orders/**").permitAll()
+//                        .requestMatchers("/api/v1/payments/**").hasRole("USER") // En un fututo, se incluirán pagos
+//                        .requestMatchers("/images/**").permitAll()
+//                        .requestMatchers("/api/v1/home/**").permitAll()
+//                        .requestMatchers("/api/v1/security/**")
+//                        .permitAll()
+//                        .anyRequest()
+//                        .authenticated()
+
+        ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

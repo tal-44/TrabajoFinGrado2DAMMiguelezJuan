@@ -1,6 +1,7 @@
 package tfg.backend.infrastructure.rest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import tfg.backend.domain.model.Product;
 
 @RestController
 @RequestMapping("/api/v1/home")
+@CrossOrigin("http://localhost:4200")
 public class HomeController {
 
     private final ProductService productService;
