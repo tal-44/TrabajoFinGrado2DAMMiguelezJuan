@@ -32,9 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
+
 ### Claves paypal ###
-.backend/src/main/resources/application-dev.properties
-.ESPortiba/backend/src/main/java/tfg/backend/infrastructure/jwt/Constants.java
+
+    .backend/src/main/resources/application-dev.properties
+    .ESPortiba/backend/src/main/java/tfg/backend/infrastructure/jwt/Constants.java
 
 
 

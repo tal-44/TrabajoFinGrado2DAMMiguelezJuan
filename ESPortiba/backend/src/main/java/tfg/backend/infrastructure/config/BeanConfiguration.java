@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BeanConfiguration {
+
     @Bean
     public UserService userService(IUserRepository iUserRepository) {
         return new UserService(iUserRepository);
@@ -57,7 +58,7 @@ public class BeanConfiguration {
 */
 
     @Bean
-    public RegistrationService registraationService(IUserRepository iUserRepository){
+    public RegistrationService registrationService(IUserRepository iUserRepository){
         return new RegistrationService(iUserRepository);
     }
 
