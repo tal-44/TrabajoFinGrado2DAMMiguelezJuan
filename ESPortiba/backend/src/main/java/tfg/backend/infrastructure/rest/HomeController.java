@@ -1,10 +1,7 @@
 package tfg.backend.infrastructure.rest;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tfg.backend.application.services.ProductService;
 import tfg.backend.domain.model.Product;
 
@@ -22,6 +19,11 @@ public class HomeController {
     @GetMapping
     public ResponseEntity<Iterable<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> findById(@PathVariable Integer id){
+        return ResponseEntity.ok(productService.findById(id));
     }
 
 }

@@ -8,9 +8,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import tfg.backend.domain.model.User;
 import tfg.backend.infrastructure.dto.JWTClient;
 import tfg.backend.infrastructure.dto.UserDTO;
 import tfg.backend.infrastructure.jwt.JWTGenerator;
+import tfg.backend.application.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/security")
@@ -20,10 +22,12 @@ public class LoginController {
 
     private final AuthenticationManager authenticationManager;
     private final JWTGenerator jwtGenerator;
+    private final UserService userService;
 
-    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator) {
+    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -36,9 +40,11 @@ public class LoginController {
 
         log.info("Rol de user: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
 
+        User user = userService.findByEmail(userDTO.username());
+
 
         String token = jwtGenerator.getToken(userDTO.username());
-        JWTClient jwtClient = new JWTClient(token);
+        JWTClient jwtClient = new JWTClient(user.getId(), token, user.getUserType().toString());
 
 
         return new ResponseEntity<>(jwtClient, HttpStatus.OK);
