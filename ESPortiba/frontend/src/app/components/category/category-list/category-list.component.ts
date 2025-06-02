@@ -68,8 +68,8 @@ export class CategoryListComponent implements OnInit {
         );
 
         Swal.fire({
-          title: "Productos",
-          text: "Producto eliminado correctamente.",
+          title: "Categorias",
+          text: "Categoria eliminada correctamente.",
           icon: "success"
         });
       }
