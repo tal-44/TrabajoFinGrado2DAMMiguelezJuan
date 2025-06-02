@@ -14,7 +14,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CategoryListComponent } from './components/category/category-list/category-list.component';
 import { CategoryAddComponent } from './components/category/category-add/category-add.component';
-import { NuevoComponenteComponent } from './components/nuevo-componente/nuevo-componente.component';
 import { DetailProductComponent } from './components/cart/detail-product/detail-product.component';
 import { HeaderUserComponent } from './components/header-user/header-user.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -52,7 +51,6 @@ const routes: Routes = [
     ProductAddComponent,
     CategoryListComponent,
     CategoryAddComponent,
-    NuevoComponenteComponent,
     DetailProductComponent,
     SumaryOrderComponent,
     PaymentSuccessComponent,

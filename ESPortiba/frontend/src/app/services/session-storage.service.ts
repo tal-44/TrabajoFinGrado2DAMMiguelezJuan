@@ -12,20 +12,29 @@ export class SessionStorageService {
   constructor() { }
 
   setItem(key: string, value: any) {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    }
   }
 
   getItem(key: string){
-    const item = sessionStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const item = sessionStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    }
+    return null;
   }
 
   removeItem(key: string) {
-    sessionStorage.removeItem(key);
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      sessionStorage.removeItem(key);
+    }
   }
 
   clear() {
-    sessionStorage.clear();
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      sessionStorage.clear();
+    }
   }
 
 }
