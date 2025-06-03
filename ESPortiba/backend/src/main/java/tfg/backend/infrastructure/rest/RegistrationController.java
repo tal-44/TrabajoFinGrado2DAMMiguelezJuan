@@ -10,7 +10,7 @@ import tfg.backend.domain.model.User;
 
 @RestController
 @RequestMapping("/api/v1/security")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8085"})
 @Slf4j
 public class RegistrationController {
 
