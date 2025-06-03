@@ -15,7 +15,6 @@ import tfg.backend.infrastructure.jwt.JWTAuthorizationFilter;
 
 import java.util.Arrays;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,47 +26,60 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration
+    ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors(
-                cors -> cors.configurationSource(
-                        request -> {
-                            CorsConfiguration corsConfiguration = new CorsConfiguration();
-                            corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-                            corsConfiguration.setAllowedMethods(Arrays.asList("*"));
-                            corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-                            return corsConfiguration;
-                        }
-                )).csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
-                aut -> aut
-                       .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+        httpSecurity
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+                    corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+                    corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+                    return corsConfiguration;
+                }))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        // Permitir rutas de la SPA y recursos estáticos
+                        .requestMatchers("/", "/index.html").permitAll()
+                        .requestMatchers(
+                                "/**/*.css",
+                                "/**/*.html",
+                                "/**/*.js",
+                                "/**/*.png",
+                                "/**/*.jpg",
+                                "/**/*.jpeg",
+                                "/**/*.gif",
+                                "/**/*.webp",
+                                "/**/*.svg",
+                                "/assets/**",
+                                "/favicon.ico"
+                        ).permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/images/*.webp").permitAll()
+
+                        // Permitir páginas públicas de la API
+                        .requestMatchers("/api/v1/home/**").permitAll()
+                        .requestMatchers("/api/v1/payments/success").permitAll()
+                        .requestMatchers("/api/v1/security/**").permitAll()
+
+                        // Rutas protegidas por rol
+                        .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/orders/**").hasRole("USER")
-                        .requestMatchers("/api/v1/payments/success").permitAll()
-                        .requestMatchers("/api/v1/payments/**").hasRole("USER") // En un fututo, se incluirán pagos
-                        .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/api/v1/home/**").permitAll()
-                        .requestMatchers("/api/v1/security/**")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers("/api/v1/payments/**").hasRole("USER")
 
-//                       .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/api/v1/admin/products/**").permitAll()
-//                        .requestMatchers("/api/v1/orders/**").permitAll()
-//                        .requestMatchers("/api/v1/payments/**").hasRole("USER") // En un fututo, se incluirán pagos
-//                        .requestMatchers("/images/**").permitAll()
-//                        .requestMatchers("/api/v1/home/**").permitAll()
-//                        .requestMatchers("/api/v1/security/**")
-//                        .permitAll()
-//                        .anyRequest()
-//                        .authenticated()
+                        // Cualquier otra petición a /api/** requiere autenticación
+                        .requestMatchers("/api/**").authenticated()
 
-        ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+                        // Cualquier otra ruta (SPA) se permite para que el FrontendController la maneje
+                        .anyRequest().permitAll()
+                )
+                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -76,5 +88,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

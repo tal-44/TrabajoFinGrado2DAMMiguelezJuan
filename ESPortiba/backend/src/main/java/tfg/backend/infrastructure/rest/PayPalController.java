@@ -13,7 +13,7 @@ import tfg.backend.infrastructure.Service.PayPalService;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8085"})
 @RequestMapping("/api/v1/payments")
 public class PayPalController {
 
@@ -45,7 +45,8 @@ public class PayPalController {
             throw new RuntimeException(e);
         }
 
-        return new URLPayPalResponse("http://localhost:4200");
+        return new URLPayPalResponse("http://localhost:8085");
+//        return new URLPayPalResponse("http://localhost:4200");
     }
 
     @GetMapping("/success")
@@ -57,10 +58,12 @@ public class PayPalController {
             Payment payment = payPalService.executePayment(paymentId, payerId);
 
             if (payment.getState().equals("approved")) {
-                return new RedirectView("http://localhost:4200/payment/success");
+                return new RedirectView("http://localhost:8085/payment/success");
+//                return new RedirectView("http://localhost:4200/payment/success");
 //                return new RedirectView("http://localhost:4200");
             } else {
-                return new RedirectView("http://localhost:4200");
+                return new RedirectView("http://localhost:8085");
+//                return new RedirectView("http://localhost:4200");
             }
 
         } catch (PayPalRESTException e) {
@@ -71,7 +74,9 @@ public class PayPalController {
 
     @GetMapping("/cancel")
     public RedirectView paymentCancel() {
-        return new RedirectView("http://localhost:4200");
+        return new RedirectView("http://localhost:8085");
+        //return new RedirectView("http://localhost:4200"
+
     }
 
 }

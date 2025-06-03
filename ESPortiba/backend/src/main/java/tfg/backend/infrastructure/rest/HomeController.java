@@ -7,7 +7,7 @@ import tfg.backend.domain.model.Product;
 
 @RestController
 @RequestMapping("/api/v1/home")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8085"})
 public class HomeController {
 
     private final ProductService productService;

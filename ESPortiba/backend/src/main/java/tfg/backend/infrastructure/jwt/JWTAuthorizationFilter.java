@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import static tfg.backend.infrastructure.jwt.JWTValidate.*;
 
 @Component
+@Slf4j
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailService customUserDetailService;
@@ -38,10 +40,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 if (claims.get("authorities") != null) {
                     setAuthentication(claims, customUserDetailService);
                 } else {
+                    log.error("JWT token does not contain authorities");
                     SecurityContextHolder.clearContext();
                 }
 
             } else {
+                log.error("JWT token is missing or invalid");
                 SecurityContextHolder.clearContext();
             }
 

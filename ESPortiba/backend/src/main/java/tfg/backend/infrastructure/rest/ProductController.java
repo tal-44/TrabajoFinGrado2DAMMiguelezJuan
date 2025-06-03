@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1/admin/products")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8085"})
 @Slf4j
 @AllArgsConstructor
 public class ProductController {
