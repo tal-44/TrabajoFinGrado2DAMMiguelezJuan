@@ -1,10 +1,24 @@
-HELP.md
-target/
+# ========================
+# MAVEN Y TARGET
+# ========================
+/target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
+# ========================
+# ARCHIVOS CON CLAVES SENSIBLES
+# ========================
+# Archivos de configuración y claves API
+src/main/resources/application.properties
+src/main/resources/application-dev.properties
+**/Constants.java
+.env
+*.env
+
+# ========================
+# IDEs y Editores
+# ========================
+
+# Spring Tool Suite (STS)
 .apt_generated
 .classpath
 .factorypath
@@ -13,30 +27,44 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
 
+# Angular (Frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/src/environments/environment.ts
+frontend/src/environments/environment.prod.ts
 
-### Claves paypal ###
+# Otros archivos temporales
+*.log
+*.class
+*.jar
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
 
-    .backend/src/main/resources/application-dev.properties
-    .ESPortiba/backend/src/main/java/tfg/backend/infrastructure/jwt/Constants.java
+# Archivos exportados o generados
+/build/
+
+
+    
 
 
 
